@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "290836685827",
+    "project_id": "analytica-todo-task-app",
+    "storage_bucket": "analytica-todo-task-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:290836685827:android:eaef4f574e3a3ac3939a36",
+        "android_client_info": {
+          "package_name": "com.analytica_data.todo_analytica_task_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAK06DzzJAb2sAoneeJg0APBUv4QsPxV6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
