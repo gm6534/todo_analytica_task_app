@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:todo_analytica_task_app/data/utils/constants/app_constants.dart';
 
 import '../app_styles/app_text_styles.dart';
 import '../constants/app_image_constant.dart';
@@ -38,10 +39,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: titleTextStyle ??
             (AppTextStyle.boldTextStyle(color: textColor, size: textSize ?? 20.sp)),
       )
-          : AssetImageView(
-        imagePath: AppImagePath.appIconLargeSvg,
-        width: 180.w,
-      ),
+          : Text(AppInfo.appTitle, style: AppTextStyle.boldTextStyle(size: 20.sp),),
       actions: actions,
       automaticallyImplyLeading: false,
       leading: leadingWidget ?? BackButton(color: textColor),

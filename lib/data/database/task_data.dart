@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:sqflite/sqflite.dart';
 
-import '../../model/task_model.dart';
+import '../../view/task/model/task_model.dart';
 import 'database.dart';
 
 class TaskData {
-  static const String tableName = 'tasks';
+  static const String tableName = 'Tasks';
 
   static Future<void> createTable(Database db) async {
     try {
@@ -25,32 +25,34 @@ class TaskData {
 
   static Future<void> insertTask(Task task) async {
     final db = await DatabaseInitializer.database;
-    String taskJson = task.toJson().toString(); // Convert task to JSON string
+    String taskJson = jsonEncode(task.toJson());
     await db?.insert(
       tableName,
-      {'Id': task.id, 'json': taskJson},
+      {'Id': task.taskID, 'json': taskJson},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   static Future<List<Task>> getTasks() async {
     final db = await DatabaseInitializer.database;
-    final List<Map<String, dynamic>> maps = await db!.query(tableName);
+    // final List<Map<String, dynamic>> maps = await db!.query(tableName);
+    final maps = await db!.query(tableName);
 
-    return List.generate(maps.length, (i) {
-      Map<String, dynamic> taskMap = jsonDecode(maps[i]['json']);
+    return List.generate(
+        maps.length, (i) {
+      Map<String, dynamic> taskMap = jsonDecode(maps[i]['json'] as String);
       return Task.fromJson(taskMap);
     });
   }
 
   static Future<void> updateTask(Task task) async {
     final db = await DatabaseInitializer.database;
-    String taskJson = task.toJson().toString();
+    String taskJson = jsonEncode(task.toJson());
     await db?.update(
       tableName,
       {'json': taskJson},
       where: 'Id = ?',
-      whereArgs: [task.id],
+      whereArgs: [task.taskID],
     );
   }
 

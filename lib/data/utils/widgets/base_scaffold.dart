@@ -31,7 +31,7 @@ class BaseScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: bgColor ?? Theme.of(context).scaffoldBackgroundColor,
-      drawer: showDrawer ? const CommonDrawer() : null,
+      drawer: showDrawer ? CommonDrawer() : null,
       appBar: CommonAppBar(
         title: appBarTitle,
         center: center,
@@ -50,24 +50,37 @@ class BaseScaffold extends StatelessWidget {
               )
             : null,
       ),
-      body: Obx(() => networkController.isConnected.value
-          ? (body ?? const SizedBox.shrink())
-          : Center(
-              child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.refresh,
-                  size: 70.w,
-                  color: Colors.grey.shade400,
-                ),
-                20.height,
-                Text(NetworkMsgString.noInternet.jsonName.tr,
-                    style: AppTextStyle.primaryTextStyle(size: 20.sp)),
-              ],
-            ))),
+      body: Column(
+        children: [
+          if(networkController.offlineController.isSyncing.value)
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.8)
+            ),
+            child: Text("Syncing Tasks", style: AppTextStyle.primaryTextStyle(color: Colors.white),).center().paddingSymmetric(vertical: 3.w),
+          ),
+          Expanded(child: body ?? const SizedBox.shrink()),
+        ],
+      ),
+      // body: Obx(() => networkController.isConnected.value
+      //     ? (body ?? const SizedBox.shrink())
+      //     : Center(
+      //         child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         crossAxisAlignment: CrossAxisAlignment.center,
+      //         mainAxisSize: MainAxisSize.min,
+      //         children: [
+      //           Icon(
+      //             Icons.refresh,
+      //             size: 70.w,
+      //             color: Colors.grey.shade400,
+      //           ),
+      //           20.height,
+      //           Text(NetworkMsgString.noInternet.jsonName.tr,
+      //               style: AppTextStyle.primaryTextStyle(size: 20.sp)),
+      //         ],
+      //       ))),
       floatingActionButton: floatingButton,
     );
   }

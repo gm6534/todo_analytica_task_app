@@ -1,5 +1,6 @@
 class Task {
-  String id;
+  String taskID;
+  String userID;
   String title;
   String description;
   String category;
@@ -7,7 +8,8 @@ class Task {
   bool isCompleted;
 
   Task({
-    required this.id,
+    required this.taskID,
+    required this.userID,
     required this.title,
     required this.description,
     required this.category,
@@ -17,7 +19,8 @@ class Task {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'taskID': taskID,
+      'userID': userID,
       'title': title,
       'description': description,
       'category': category,
@@ -28,7 +31,8 @@ class Task {
 
   static Task fromJson(Map<String, dynamic> json) {
     return Task(
-      id: json['id'],
+      taskID: json['taskID'],
+      userID: json['userID'],
       title: json['title'],
       description: json['description'],
       category: json['category'],

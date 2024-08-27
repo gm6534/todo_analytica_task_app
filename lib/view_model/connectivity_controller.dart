@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:todo_analytica_task_app/view/task/view_model/offlineController.dart';
 
 import '../data/utils/widgets/debug_print.dart';
 
@@ -12,6 +14,7 @@ class NetworkController extends GetxController with WidgetsBindingObserver {
   Connectivity? _connectivity;
 
   late StreamSubscription _streamSubscription;
+  final OfflineController offlineController = Get.find();
 
   @override
   void onInit() {
@@ -31,14 +34,14 @@ class NetworkController extends GetxController with WidgetsBindingObserver {
       Debug.mLog(e.toString());
       connectivityResult = ConnectivityResult.none;
     }
-    return _updateState(connectivityResult);
+      _updateState(connectivityResult);
   }
 
   Future<void> refreshConnectivity() async {
     await getConnectivityType();
   }
 
-  _updateState(ConnectivityResult result) {
+  _updateState(ConnectivityResult result) async {
     switch (result) {
       case ConnectivityResult.wifi:
       case ConnectivityResult.mobile:
@@ -46,11 +49,12 @@ class NetworkController extends GetxController with WidgetsBindingObserver {
         isConnected.value = true;
         break;
       case ConnectivityResult.none:
-        isConnected.value = false;
-        break;
       default:
         isConnected.value = false;
         break;
+    }
+    if(isConnected.value && !offlineController.isSyncing.value) {
+      await offlineController.syncOfflineTasks();
     }
   }
 

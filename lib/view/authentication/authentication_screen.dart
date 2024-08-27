@@ -17,98 +17,109 @@ class AuthenticationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Center(
           child: Obx(() => Container(
                 decoration: BoxDecoration(
                     color: Theme.of(context).appBarTheme.backgroundColor,
                     borderRadius: BorderRadius.circular(10.r)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Analytica To-Do App",
-                      style: AppTextStyle.boldTextStyle(
-                          size: 25.sp, color: Colors.white),
-                    ).paddingBottom(20.w),
-                    Text(
-                      authController.wantToSignUp.value ? "Sign up" : "Sign in",
-                      style: AppTextStyle.boldTextStyle(
-                          size: 20.sp, color: Colors.white),
-                    ),
-                    if(authController.wantToSignUp.value)
-                    AppTextField(
-                      controller: authController.fullNameController,
-                      textFieldType: TextFieldType.NAME,
-                      decoration: InputDecoration(
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
-                        hintText: 'write full name here...',
+                child: Form(
+                  key: authController.formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "To-Do App",
+                        style: AppTextStyle.boldTextStyle(
+                            size: 25.sp, color: Colors.white),
+                      ).paddingBottom(20.w),
+                      Text(
+                        authController.wantToSignUp.value ? "Sign up" : "Sign in",
+                        style: AppTextStyle.boldTextStyle(
+                            size: 20.sp, color: Colors.white),
                       ),
-                    ),
-                    AppTextField(
-                      controller: authController.emailController,
-                      textFieldType: TextFieldType.EMAIL,
-                      decoration: InputDecoration(
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
-                        hintText: 'write email here...',
+                      if(authController.wantToSignUp.value)
+                      AppTextField(
+                        controller: authController.fullNameController,
+                        textInputAction: TextInputAction.next,
+                        textFieldType: TextFieldType.NAME,
+                        decoration: InputDecoration(
+                          fillColor: Theme.of(context).scaffoldBackgroundColor,
+                          hintText: 'write full name here...',
+                        ),
                       ),
-                    ),
-                    AppTextField(
-                      controller: authController.passController,
-                      textFieldType: TextFieldType.PASSWORD,
-                      isPasswordVisible: authController.isPasswordVisible.value,
-                      decoration: InputDecoration(
-                        fillColor: Theme.of(context).scaffoldBackgroundColor,
-                        suffixIcon: IconButton(
-                            onPressed: authController.togglePasswordVisibility,
-                            icon: Icon(authController.isPasswordVisible.value ? Icons.visibility_off : Icons.visibility)),
-                        hintText: 'write password here...',
+                      AppTextField(
+                        controller: authController.emailController,
+                        textFieldType: TextFieldType.EMAIL,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          fillColor: Theme.of(context).scaffoldBackgroundColor,
+                          hintText: 'write email here...',
+                        ),
                       ),
-                    ),
-                    CommonFlatButton(
-                      title: authController.wantToSignUp.value ? "Sign up" : "Sign in",
-                      btnColor: Get.isDarkMode
+                      AppTextField(
+                        controller: authController.passController,
+                        textFieldType: TextFieldType.PASSWORD,
+                        isPasswordVisible: authController.isPasswordVisible.value,
+                        decoration: InputDecoration(
+                          fillColor: Theme.of(context).scaffoldBackgroundColor,
+                          suffixIcon: IconButton(
+                              onPressed: authController.togglePasswordVisibility,
+                              icon: Icon(authController.isPasswordVisible.value ? Icons.visibility_off : Icons.visibility)),
+                          hintText: 'write password here...',
+                        ),
+                      ),
+                      authController.isLoading.value
+                          ? CircularProgressIndicator(
+                          color: Get.isDarkMode
                           ? AppColors.foregroundColorPrimaryDark
-                          : AppColors.elevatedBTNColorDark,
-                      onTap: () {
-                        if(authController.wantToSignUp.value) {
-                          authController.signUp();
-                        }
-                        else {
-                          authController.signIn();
-                        }
-                      },
-                    ).withWidth(double.infinity),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          child: FittedBox(
-                            child: Text(
-                              authController.wantToSignUp.value
-                                  ? 'Already have account?'
-                                  : "You don't have an account?",
-                              style: AppTextStyle.primaryTextStyle(
-                                  size: 13.sp,
-                                  color: Theme.of(context)
-                                      .scaffoldBackgroundColor),
+                          : AppColors.elevatedBTNColorDark)
+                          : CommonFlatButton(
+                        title: authController.wantToSignUp.value ? "Sign up" : "Sign in",
+                        btnColor: Get.isDarkMode
+                            ? AppColors.foregroundColorPrimaryDark
+                            : AppColors.elevatedBTNColorDark,
+                        onTap: () {
+                          if(authController.wantToSignUp.value) {
+                            authController.signUpWithEmail();
+                          }
+                          else {
+                            authController.signInWithEmail();
+                          }
+                        },
+                      ).withWidth(double.infinity),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: FittedBox(
+                              child: Text(
+                                authController.wantToSignUp.value
+                                    ? 'Already have account?'
+                                    : "You don't have an account?",
+                                style: AppTextStyle.primaryTextStyle(
+                                    size: 13.sp,
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
+                              ),
                             ),
                           ),
-                        ),
-                        CommonTextButton(
-                          title: authController.wantToSignUp.value
-                              ? 'Sign In'
-                              : 'Sign Up',
-                          hPadding: 5,
-                          vPadding: 5,
-                          onTap: authController.toggleSignUpMode,
-                        ),
-                      ],
-                    ).paddingSymmetric(horizontal: 20.w),
-                  ],
-                ).marginSymmetric(vertical: 40.h, horizontal: 20.w),
+                          CommonTextButton(
+                            title: authController.wantToSignUp.value
+                                ? 'Sign In'
+                                : 'Sign Up',
+                            hPadding: 5,
+                            vPadding: 5,
+                            onTap: authController.toggleSignUpMode,
+                          ),
+                        ],
+                      ).paddingSymmetric(horizontal: 20.w),
+                    ],
+                  ).marginSymmetric(vertical: 40.h, horizontal: 20.w),
+                ),
               ).marginSymmetric(vertical: 20.w, horizontal: 15.w)),
         ),
       ),

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../../model/task_model.dart';
+import '../../../view/task/model/task_model.dart';
 
 class TaskService {
-  final CollectionReference taskCollection = FirebaseFirestore.instance.collection('tasks');
+  final CollectionReference taskCollection = FirebaseFirestore.instance.collection('Tasks');
 
   Future<void> addTask(Task task) async {
     await taskCollection.add(task.toJson());

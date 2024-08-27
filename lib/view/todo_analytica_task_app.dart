@@ -13,11 +13,10 @@ import '../view_model/theme_controller.dart';
 class ToDoAnalyticaTaskApp extends StatelessWidget {
   ToDoAnalyticaTaskApp({super.key});
 
-  final themeController = Get.put(ThemeController());
-  final AuthController authController = Get.put(AuthController());
+  final ThemeController themeController = Get.find();
+  final AuthController authController = Get.find();
   @override
   Widget build(BuildContext context) {
-
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (_, child) => Obx(() => GetMaterialApp(

@@ -18,9 +18,6 @@ class LanguageSwitcher extends StatelessWidget {
         style: AppTextStyle.boldTextStyle()
       ),
       onPressed: () {
-        // String newLocale = Get.locale?.languageCode == 'en' ? 'ur' : 'en';
-        // LocalizationService.changeLocale(langCode: newLocale, countryCode: 'PK');
-
         debugPrint("-------${LocalizationService.locale.languageCode}-----------");
         debugPrint("-------${LocalizationService.locale.countryCode}-----------");
 

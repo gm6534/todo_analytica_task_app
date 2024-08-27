@@ -33,7 +33,7 @@ class DatabaseInitializer {
   }
 
   static Database? get database {
-    return _database!;
+    return _database;
   }
 
   static Future close() async {

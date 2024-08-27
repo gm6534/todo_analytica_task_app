@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../model/task_model.dart';
-import '../../view_model/task_controller.dart';
+import '../model/task_model.dart';
+import '../view_model/task_controller.dart';
 import 'add_edit_task_screen.dart';
 
 class TaskDetailScreen extends StatelessWidget {
@@ -24,7 +24,7 @@ class TaskDetailScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             onPressed: () {
-              taskController.deleteTask(task.id);
+              taskController.deleteTask(task.taskID);
               Get.back();
             },
           ),

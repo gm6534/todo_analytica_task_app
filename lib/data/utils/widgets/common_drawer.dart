@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:todo_analytica_task_app/data/api/api_services/auth_service.dart';
+import 'package:todo_analytica_task_app/data/utils/constants/app_constants.dart';
 import 'package:todo_analytica_task_app/data/utils/widgets/extensions.dart';
+import 'package:todo_analytica_task_app/view_model/auth_controller.dart';
 import '../app_styles/app_text_styles.dart';
 import '../constants/app_image_constant.dart';
 import '../routes/app_routes.dart';
 import 'asset_image_view.dart';
 
 class CommonDrawer extends StatelessWidget {
-  const CommonDrawer({super.key});
+  CommonDrawer({super.key});
+
+  final AuthController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,7 @@ class CommonDrawer extends StatelessWidget {
           children: [
             Column(
               children: [
-                const AssetImageView(imagePath: AppImagePath.appIconLargeSvg)
+                Text(AppInfo.appTitle, style: AppTextStyle.boldTextStyle(color: Colors.white, size: 20.sp),)
                     .paddingSymmetric(vertical: 20)
                     .center(),
                 Row(
@@ -31,8 +36,7 @@ class CommonDrawer extends StatelessWidget {
                       radius: 32.r,
                       backgroundColor:
                           Theme.of(context).scaffoldBackgroundColor,
-                      child: const AssetImageView(
-                          imagePath: AppImagePath.noImagePlaceHolder),
+                      child: Icon(Icons.person, color: Theme.of(context).appBarTheme.backgroundColor, size: 20.w,),
                     ),
                     20.width,
                     Column(
@@ -41,12 +45,12 @@ class CommonDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Ai Content Creator",
+                          AuthService.auth.currentUser?.displayName ?? "",
                           style: AppTextStyle.boldTextStyle(
                               color: Theme.of(context).scaffoldBackgroundColor),
                         ).fit(),
                         Text(
-                          "example@aicreator.com",
+                          AuthService.auth.currentUser?.email ?? "",
                           style: AppTextStyle.primaryTextStyle(
                               color: Theme.of(context).scaffoldBackgroundColor),
                         ).fit(),
@@ -71,11 +75,12 @@ class CommonDrawer extends StatelessWidget {
                     style: AppTextStyle.primaryTextStyle(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
-                  onTap: () {
-                    // Get.back();
+                  onTap: () async {
                     Scaffold.of(context).closeDrawer();
+                    if(item.route == AppRoutes.authScreen) {
+                      await controller.signOut();
+                    }
                     Get.toNamed(item.route);
-                    // Navigator.pushNamed(context, item.route);
                   },
                 );
               },
@@ -126,6 +131,6 @@ class DrawerItemDataModel {
 }
 
 List<DrawerItemDataModel> items = [
-  DrawerItemDataModel(
-      icon: Icons.settings, title: 'Settings', route: AppRoutes.settingScreen),
+  DrawerItemDataModel(icon: Icons.settings, title: 'Settings', route: AppRoutes.settingScreen),
+  DrawerItemDataModel(icon: Icons.exit_to_app, title: 'Logout', route: AppRoutes.authScreen),
 ];
